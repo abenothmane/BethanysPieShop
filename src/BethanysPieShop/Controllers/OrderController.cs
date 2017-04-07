@@ -25,5 +25,34 @@ namespace BethanysPieShop.Controllers
         {
             return View();
         }
+
+
+        [HttpPost]
+        public IActionResult CheckOut(Order order)
+        {
+            var items = _shoppingCart.GetShoppingCartItems();
+            _shoppingCart.ShoppingCartItems = items;
+
+            if (_shoppingCart.ShoppingCartItems.Count==0)
+            {
+                ModelState.AddModelError("", "Your cart is Empty, add some pies first");
+            }
+
+            if (ModelState.IsValid)
+            {
+                _orderRepository.CreateOrder(order);
+                _shoppingCart.ClearCart();
+                return RedirectToAction("CheckoutComplete");
+            }
+
+            return View(order);
+
+        }
+
+        public IActionResult CheckoutComplete()
+        {
+            ViewBag.CheckoutCompleteMessage = "Thanks for your order. Your'll soon enjoy your pies.";
+            return View();
+        }
     }
 }
