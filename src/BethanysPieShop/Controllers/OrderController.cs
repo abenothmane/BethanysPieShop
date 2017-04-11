@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BethanysPieShop.Models;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,7 +21,7 @@ namespace BethanysPieShop.Controllers
             _orderRepository = orderRepository;
         }
 
-
+        [Authorize]
         public IActionResult CheckOut()
         {
             return View();
@@ -28,6 +29,7 @@ namespace BethanysPieShop.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public IActionResult CheckOut(Order order)
         {
             var items = _shoppingCart.GetShoppingCartItems();
